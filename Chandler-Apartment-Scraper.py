@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # In[1]:
@@ -20,7 +20,8 @@ keyboard = kb.Controller()
 
 
 # Load Selenium Webdriver
-driver = webdriver.Chrome(r'C:\Users\jcgou\Desktop\Apartment Scraper\Chrome Driver\chromedriver.exe')
+#driver = webdriver.Chrome(r'C:\Users\jcgou\Desktop\Chandler-Apartment-Scraper\Chrome Driver\chromedriver.exe')
+driver = webdriver.Chrome(r'C:\Users\jamesgou\Desktop\Chandler-Apartment-Scraper\Chrome Driver\chromedriver.exe')
 print('Loading Selenium Webdriver')
 
 
@@ -28,8 +29,8 @@ print('Loading Selenium Webdriver')
 
 
 # Create CSV file for the pricing information
-filename = 'Chandler Apartment Pricing.csv'
-f = open(filename, 'a')
+#filename = 'Chandler Apartment Pricing.csv'
+f = open(r'C:\Users\jamesgou\Desktop\Chandler-Apartment-Scraper\Chandler Apartment Pricing.csv', 'a')
 #headers = 'Date, Apartment Complex Name, Unit, Price\n'
 #f.write(headers)
 
@@ -55,25 +56,27 @@ print('Maximizing Chrome Driver')
 # In[6]:
 
 
-# Save HTML and extract portfolio recommendation information
-san_brisas_html = driver.page_source
-san_brisas_soup = BeautifulSoup(san_brisas_html, 'lxml')
+try:
+    # Save HTML and extract portfolio recommendation information
+    san_brisas_html = driver.page_source
+    san_brisas_soup = BeautifulSoup(san_brisas_html, 'lxml')
 
-# Extract apartment A2 price
-san_brisas_a2_price = san_brisas_soup.find(id = 'fp_6830196_range').get_text()
-print("The San Brisas A2 price is currently " + san_brisas_a2_price)
-san_brisas_a2_price = san_brisas_a2_price.replace(',', '')
+    # Extract apartment A2 price
+    san_brisas_a2_price = san_brisas_soup.find(id = 'fp_6830196_range').get_text()
+    print("The San Brisas A2 price is currently " + san_brisas_a2_price)
+    san_brisas_a2_price = san_brisas_a2_price.replace(',', '')
+    
+    # Write San Brisas prices to CSV file
+    f.write(str(date_object) + ',' + 'San Brisas' + ',' + 'A2' + ',' + str(san_brisas_a2_price) + '\n')
+    print('San Brisas prices written')
+    
+except:
+    # Write San Brisas prices to CSV file
+    f.write(str(date_object) + ',' + 'San Brisas' + ',' + 'A2' + ',' + 'Error' + '\n')
+    print('San Brisas prices written')
 
 
 # In[7]:
-
-
-# Write San Brisas prices to CSV file
-f.write(str(date_object) + ',' + 'San Brisas' + ',' + 'A2' + ',' + str(san_brisas_a2_price) + '\n')
-print('San Brisas prices written')
-
-
-# In[8]:
 
 
 # Navigate to 2nd apartment website
@@ -82,7 +85,7 @@ driver.get(country_brook_url)
 print('Navigating to next apartment, Country Brook')
 
 
-# In[9]:
+# In[8]:
 
 
 # Save HTML and extract portfolio recommendation information
@@ -90,7 +93,7 @@ country_brook_html = driver.page_source
 country_brook_soup = BeautifulSoup(country_brook_html, 'lxml')
 
 
-# In[10]:
+# In[9]:
 
 
 unit_list = []
@@ -98,7 +101,7 @@ price_list = []
 
 table = country_brook_soup.table
 table_rows = table.find_all('tr')
-for tr in table_rows[1:7]:
+for tr in table_rows[1:8]:
     td = tr.find_all('td')
     row = [i.text for i in td]
     unit_list.append(row[1])
@@ -115,7 +118,7 @@ print("The Country Brook prices are currently: ")
 print(country_brook_dict)
 
 
-# In[11]:
+# In[10]:
 
 
 # Write Country Brook prices to CSV file
@@ -136,7 +139,7 @@ f.write(str(date_object) + ',' + 'Country Brook' + ',' + 'B2' + ',' + str(cb_b2_
 print('Country Brook prices written')
 
 
-# In[12]:
+# In[11]:
 
 
 # Navigate to 3rd apartment website
@@ -145,7 +148,7 @@ driver.get(san_tierra_url)
 print('Navigating to next apartment, San Tierra')
 
 
-# In[13]:
+# In[12]:
 
 
 # Save HTML and extract portfolio recommendation information
@@ -153,7 +156,7 @@ san_tierra_html = driver.page_source
 san_tierra_soup = BeautifulSoup(san_tierra_html, 'lxml')
 
 
-# In[14]:
+# In[13]:
 
 
 # Extract apartment price 1 bed 1 bath 801 sqft
@@ -170,7 +173,7 @@ san_tierra_1x1_part_b = san_tierra_1x1_part_b.replace(',', '')
 san_tierra_1x1_part_b = san_tierra_1x1_part_b.replace('.00', '')
 
 
-# In[15]:
+# In[14]:
 
 
 # Extract apartment price 2 bed 2 bath 1005 sqft
@@ -187,7 +190,7 @@ san_tierra_2x2a_part_b = san_tierra_2x2a_part_b.replace(',', '')
 san_tierra_2x2a_part_b = san_tierra_2x2a_part_b.replace('.00', '')
 
 
-# In[16]:
+# In[15]:
 
 
 # Extract apartment price 2 bed 2 bath 1050 sqft
@@ -204,7 +207,7 @@ san_tierra_2x2b_part_b = san_tierra_2x2b_part_b.replace(',', '')
 san_tierra_2x2b_part_b = san_tierra_2x2b_part_b.replace('.00', '')
 
 
-# In[17]:
+# In[16]:
 
 
 # Extract apartment price 2 bed 2 bath 1082 sqft
@@ -221,7 +224,7 @@ san_tierra_2x2c_part_b = san_tierra_2x2c_part_b.replace(',', '')
 san_tierra_2x2c_part_b = san_tierra_2x2c_part_b.replace('.00', '')
 
 
-# In[18]:
+# In[17]:
 
 
 # Write San Tierra prices to CSV file
@@ -232,7 +235,7 @@ f.write(str(date_object) + ',' + 'San Tierra' + ',' + str(san_tierra_2x2c_part_a
 print('San Tierra prices written')
 
 
-# In[19]:
+# In[18]:
 
 
 # Navigate to 4th apartment website
@@ -241,7 +244,7 @@ driver.get(reflections_gilasprings_url)
 print('Navigating to next apartment, Reflections at Gila Springs')
 
 
-# In[20]:
+# In[19]:
 
 
 # Save HTML and extract portfolio recommendation information
@@ -249,7 +252,7 @@ reflections_gilasprings_html = driver.page_source
 reflections_gilasprings_soup = BeautifulSoup(reflections_gilasprings_html, 'lxml')
 
 
-# In[21]:
+# In[20]:
 
 
 # Extract apartment price 1 bed 1 bath 824 sqft
@@ -266,7 +269,7 @@ reflections_1x1a_part_b = reflections_1x1a_part_b.replace(',', '')
 reflections_1x1a_part_b = reflections_1x1a_part_b.replace('.00', '')
 
 
-# In[22]:
+# In[21]:
 
 
 # Extract apartment price 1 bed 1 bath 949 sqft
@@ -283,7 +286,7 @@ reflections_1x1b_part_b = reflections_1x1b_part_b.replace(',', '')
 reflections_1x1b_part_b = reflections_1x1b_part_b.replace('.00', '')
 
 
-# In[23]:
+# In[22]:
 
 
 # Extract apartment price 2 bed 2 bath 1186 sqft
@@ -300,7 +303,7 @@ reflections_2x2a_part_b = reflections_2x2a_part_b.replace(',', '')
 reflections_2x2a_part_b = reflections_2x2a_part_b.replace('.00', '')
 
 
-# In[24]:
+# In[23]:
 
 
 # Extract apartment price 2 bed 2 bath 1156 sqft
@@ -317,7 +320,7 @@ reflections_2x2b_part_b = reflections_2x2b_part_b.replace(',', '')
 reflections_2x2b_part_b = reflections_2x2b_part_b.replace('.00', '')
 
 
-# In[25]:
+# In[24]:
 
 
 # Write Reflections prices to CSV file
@@ -328,7 +331,7 @@ f.write(str(date_object) + ',' + 'Reflections at Gila Springs' + ',' + str(refle
 print('Reflections at Gila Springs prices written')
 
 
-# In[26]:
+# In[25]:
 
 
 # Navigate to 5th apartment website
@@ -337,7 +340,7 @@ driver.get(the_ventura_url)
 print('Navigating to last apartment, The Ventura')
 
 
-# In[27]:
+# In[26]:
 
 
 # Save HTML and extract portfolio recommendation information
@@ -345,7 +348,7 @@ the_ventura_html = driver.page_source
 the_ventura_soup = BeautifulSoup(the_ventura_html, 'lxml')
 
 
-# In[28]:
+# In[27]:
 
 
 # Extract apartment A1 price 1 bed 1 bath 798 sqft
@@ -362,7 +365,7 @@ ventura_1x1_part_b = ventura_1x1_part_b.replace(',','')
 print(ventura_1x1_part_b)
 
 
-# In[29]:
+# In[28]:
 
 
 # Extract apartment B2 price 1 bed 1 bath 1039 sqft
@@ -379,7 +382,7 @@ ventura_2x2_part_b = ventura_2x2_part_b.replace(',', '')
 print(ventura_2x2_part_b)
 
 
-# In[30]:
+# In[29]:
 
 
 # Write Ventura prices to CSV file
@@ -388,7 +391,7 @@ f.write(str(date_object) + ',' + 'The Ventura' + ',' + str(ventura_2x2_part_a) +
 print('The Ventura prices written')
 
 
-# In[31]:
+# In[30]:
 
 
 print("Finished!")
